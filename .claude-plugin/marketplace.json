@@ -1,0 +1,25 @@
+{
+  "name": "ark-skills-marketplace",
+  "owner": {
+    "name": "Kowills",
+    "url": "https://github.com/Kowills"
+  },
+  "metadata": {
+    "description": "Useful AI skills for Claude Code",
+    "version": "1.0.0",
+    "repository": "https://github.com/Kowills/ark-skills-marketplace"
+  },
+  "plugins": [
+    {
+      "name": "apple-ppt-builder-suite",
+      "description": "Premium Apple Liquid Glass style web PPT builder skills for Claude Code, support all scenario presentation creation",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/apple-style-page-ppt-builder",
+        "./skills/apple-style-page-ppt-builder-plus"
+      ]
+    }
+  ]
+}
+
