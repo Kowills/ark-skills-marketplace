@@ -19,6 +19,15 @@
         "./skills/apple-style-page-ppt-builder",
         "./skills/apple-style-page-ppt-builder-plus"
       ]
+    },
+    {
+      "name": "bili-summary",
+      "description": "B站UP主近期动态总结工具，自动获取并总结UP主的图文动态和视频内容，生成结构化摘要",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/bili-summary"
+      ]
     }
   ]
 }
