@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{author_name}} · 动态总结</title>
+<style>
+  /* ========== Reset & Base ========== */
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --blue: #007AFF;
+    --purple: #5856D6;
+    --green: #34C759;
+    --orange: #FF9500;
+    --red: #FF3B30;
+    --bg: #F5F7FA;
+    --text-primary: #1D1D1F;
+    --text-secondary: #424245;
+    --text-tertiary: #86868B;
+    --card-bg: rgba(255,255,255,0.72);
+    --card-border: rgba(255,255,255,0.45);
+    --shadow: 0 4px 24px rgba(0,0,0,0.06);
+    --shadow-hover: 0 8px 40px rgba(0,0,0,0.10);
+    --radius-lg: 24px;
+    --radius-md: 16px;
+    --radius-sm: 12px;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display",
+                 "PingFang SC", "Noto Sans SC", "Source Han Sans SC", "Microsoft YaHei",
+                 sans-serif;
+    background: var(--bg);
+    color: var(--text-secondary);
+    line-height: 1.7;
+    min-height: 100vh;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ========== Ambient Light Blobs ========== */
+  .ambient { position: fixed; pointer-events: none; z-index: 0; }
+  .ambient-1 {
+    width: 800px; height: 800px; top: -200px; right: -200px;
+    background: radial-gradient(circle, rgba(0,122,255,0.10) 0%, transparent 70%);
+    filter: blur(120px);
+  }
+  .ambient-2 {
+    width: 600px; height: 600px; bottom: -100px; left: -150px;
+    background: radial-gradient(circle, rgba(88,86,214,0.10) 0%, transparent 70%);
+    filter: blur(140px);
+  }
+  .ambient-3 {
+    width: 500px; height: 500px; top: 50%; left: 50%; transform: translate(-50%,-50%);
+    background: radial-gradient(circle, rgba(52,199,89,0.06) 0%, transparent 70%);
+    filter: blur(120px);
+  }
+
+  /* ========== Layout ========== */
+  .page-wrapper {
+    position: relative; z-index: 1;
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 80px 40px 100px;
+  }
+
+  /* ========== Hero Section ========== */
+  .hero {
+    text-align: center;
+    margin-bottom: 64px;
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: linear-gradient(135deg, var(--blue), var(--purple));
+    color: #fff;
+    font-size: 13px; font-weight: 600;
+    padding: 6px 16px;
+    border-radius: 20px;
+    letter-spacing: 0.5px;
+    margin-bottom: 20px;
+  }
+  .hero-badge svg { width: 14px; height: 14px; fill: currentColor; }
+  .hero h1 {
+    font-size: 42px; font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: -0.5px;
+    margin-bottom: 8px;
+  }
+  .hero h1 span {
+    background: linear-gradient(135deg, var(--blue), var(--purple));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .hero-sub {
+    font-size: 17px; color: var(--text-tertiary);
+    font-weight: 400;
+  }
+
+  /* ========== Glass Card ========== */
+  .glass {
+    background: var(--card-bg);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
+    padding: 32px;
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+  }
+  .glass:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-2px);
+  }
+
+  /* ========== Section Title ========== */
+  .section-title {
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 20px;
+  }
+  .section-title::before {
+    content: '';
+    width: 4px; height: 24px;
+    background: linear-gradient(180deg, var(--blue), var(--purple));
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+  .section-title h2 {
+    font-size: 21px; font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: -0.3px;
+  }
+
+  /* ========== Stat Row ========== */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 48px;
+  }
+  .stat-card {
+    background: var(--card-bg);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow);
+    padding: 24px 20px;
+    text-align: center;
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+  }
+  .stat-card:hover { box-shadow: var(--shadow-hover); transform: translateY(-2px); }
+  .stat-number {
+    font-size: 36px; font-weight: 700;
+    background: linear-gradient(135deg, var(--blue), var(--purple));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1.2;
+  }
+  .stat-number.green {
+    background: linear-gradient(135deg, #30B050, var(--green));
+    -webkit-background-clip: text; background-clip: text;
+  }
+  .stat-number.orange {
+    background: linear-gradient(135deg, var(--orange), #FF6B00);
+    -webkit-background-clip: text; background-clip: text;
+  }
+  .stat-number.red {
+    background: linear-gradient(135deg, var(--red), #D63030);
+    -webkit-background-clip: text; background-clip: text;
+  }
+  .stat-label {
+    font-size: 13px; color: var(--text-tertiary);
+    margin-top: 6px; font-weight: 500;
+  }
+
+  /* ========== Content Sections ========== */
+  .content-grid {
+    display: flex; flex-direction: column;
+    gap: 32px;
+  }
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+
+  /* ========== Tags / Pills ========== */
+  .tag {
+    display: inline-flex; align-items: center;
+    font-size: 12px; font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 20px;
+    letter-spacing: 0.3px;
+  }
+  .tag-blue { background: rgba(0,122,255,0.10); color: var(--blue); }
+  .tag-purple { background: rgba(88,86,214,0.10); color: var(--purple); }
+  .tag-green { background: rgba(52,199,89,0.10); color: #2DA44E; }
+  .tag-orange { background: rgba(255,149,0,0.10); color: #CC7A00; }
+  .tag-red { background: rgba(255,59,48,0.10); color: var(--red); }
+
+  /* ========== List Styles ========== */
+  .bullet-list { list-style: none; }
+  .bullet-list li {
+    position: relative;
+    padding-left: 18px;
+    margin-bottom: 10px;
+    font-size: 15px;
+    line-height: 1.65;
+  }
+  .bullet-list li::before {
+    content: '';
+    position: absolute; left: 0; top: 9px;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--blue), var(--purple));
+  }
+
+  /* ========== Blockquote ========== */
+  .quote-block {
+    position: relative;
+    background: rgba(88,86,214,0.04);
+    border-left: 3px solid var(--purple);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    padding: 20px 24px;
+    margin-top: 16px;
+    font-size: 15px;
+    color: var(--text-primary);
+    font-weight: 500;
+    line-height: 1.75;
+  }
+  .quote-block::before {
+    content: '\201C';
+    position: absolute; top: 8px; left: 12px;
+    font-size: 32px; color: var(--purple); opacity: 0.25;
+    font-family: Georgia, serif;
+  }
+
+  /* ========== Table ========== */
+  .table-wrap {
+    overflow-x: auto;
+    margin-top: 16px;
+  }
+  .apple-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 14px;
+  }
+  .apple-table thead th {
+    background: rgba(0,122,255,0.06);
+    color: var(--text-primary);
+    font-weight: 600;
+    padding: 14px 18px;
+    text-align: left;
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+  }
+  .apple-table thead th:first-child { border-radius: var(--radius-sm) 0 0 0; }
+  .apple-table thead th:last-child { border-radius: 0 var(--radius-sm) 0 0; }
+  .apple-table tbody td {
+    padding: 14px 18px;
+    border-bottom: 1px solid rgba(0,0,0,0.04);
+    vertical-align: top;
+  }
+  .apple-table tbody tr:last-child td { border-bottom: none; }
+  .apple-table tbody tr:last-child td:first-child { border-radius: 0 0 0 var(--radius-sm); }
+  .apple-table tbody tr:last-child td:last-child { border-radius: 0 0 var(--radius-sm) 0; }
+
+  /* ========== Target Cards ========== */
+  .target-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 16px;
+  }
+  .target-card {
+    background: rgba(255,255,255,0.5);
+    border: 1px solid rgba(255,255,255,0.5);
+    border-radius: var(--radius-sm);
+    padding: 18px 20px;
+    transition: background 0.2s;
+  }
+  .target-card:hover { background: rgba(255,255,255,0.75); }
+  .target-name {
+    font-size: 15px; font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 6px;
+  }
+  .target-desc {
+    font-size: 13px; color: var(--text-tertiary);
+    line-height: 1.6;
+  }
+
+  /* ========== Philosophy Dark Block ========== */
+  .dark-block {
+    background: #1C1C1E;
+    border-radius: var(--radius-lg);
+    padding: 40px;
+    color: #F5F5F7;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .dark-block::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 250px; height: 250px;
+    background: radial-gradient(circle, rgba(0,122,255,0.15) 0%, transparent 70%);
+    filter: blur(60px);
+  }
+  .dark-block::after {
+    content: '';
+    position: absolute;
+    bottom: -40px; left: -40px;
+    width: 200px; height: 200px;
+    background: radial-gradient(circle, rgba(88,86,214,0.12) 0%, transparent 70%);
+    filter: blur(60px);
+  }
+  .dark-block .philosophy-label {
+    font-size: 12px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 2px;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 16px;
+    position: relative; z-index: 1;
+  }
+  .dark-block .philosophy-text {
+    font-size: 24px; font-weight: 700;
+    line-height: 1.5;
+    position: relative; z-index: 1;
+    max-width: 600px; margin: 0 auto;
+  }
+  .dark-block .philosophy-text span {
+    background: linear-gradient(135deg, #64D2FF, #5E5CE6);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* ========== Evaluation Grid ========== */
+  .eval-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin-top: 16px;
+  }
+  .eval-item {
+    display: flex; gap: 14px; align-items: flex-start;
+    background: rgba(255,255,255,0.45);
+    border: 1px solid rgba(255,255,255,0.4);
+    border-radius: var(--radius-sm);
+    padding: 18px;
+  }
+  .eval-icon {
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; flex-shrink: 0;
+  }
+  .eval-icon.blue { background: rgba(0,122,255,0.1); }
+  .eval-icon.purple { background: rgba(88,86,214,0.1); }
+  .eval-icon.green { background: rgba(52,199,89,0.1); }
+  .eval-icon.orange { background: rgba(255,149,0,0.1); }
+  .eval-label {
+    font-size: 12px; color: var(--text-tertiary);
+    font-weight: 500; margin-bottom: 4px;
+  }
+  .eval-value {
+    font-size: 14px; color: var(--text-primary);
+    font-weight: 600; line-height: 1.5;
+  }
+
+  /* ========== Footer ========== */
+  .footer {
+    text-align: center;
+    margin-top: 64px;
+    padding-top: 32px;
+    border-top: 1px solid rgba(0,0,0,0.06);
+  }
+  .footer p {
+    font-size: 13px;
+    color: var(--text-tertiary);
+    line-height: 1.8;
+  }
+  .footer a {
+    color: var(--blue);
+    text-decoration: none;
+    font-weight: 500;
+  }
+  .footer a:hover { text-decoration: underline; }
+  .disclaimer {
+    display: inline-block;
+    margin-top: 12px;
+    font-size: 12px;
+    color: var(--text-tertiary);
+    background: rgba(255,149,0,0.06);
+    border: 1px solid rgba(255,149,0,0.12);
+    border-radius: 8px;
+    padding: 8px 16px;
+  }
+
+  /* ========== Content Markdown ========== */
+  .content-text {
+    font-size: 15px;
+    line-height: 1.8;
+  }
+  .content-text p {
+    margin-bottom: 16px;
+  }
+  .content-text p:last-child {
+    margin-bottom: 0;
+  }
+  .content-text h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 24px 0 12px;
+  }
+  .content-text h3:first-child {
+    margin-top: 0;
+  }
+
+  /* ========== Responsive ========== */
+  @media (max-width: 768px) {
+    .page-wrapper { padding: 40px 20px 60px; }
+    .hero h1 { font-size: 30px; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .two-col { grid-template-columns: 1fr; }
+    .target-grid { grid-template-columns: 1fr; }
+    .eval-grid { grid-template-columns: 1fr; }
+    .dark-block .philosophy-text { font-size: 18px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Ambient Light -->
+<div class="ambient ambient-1"></div>
+<div class="ambient ambient-2"></div>
+<div class="ambient ambient-3"></div>
+
+<div class="page-wrapper">
+
+  <!-- ===== Hero ===== -->
+  <header class="hero">
+    <div class="hero-badge">
+      <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+      B站动态追踪
+    </div>
+    <h1><span>{{author_name}}</span> · 动态总结</h1>
+    <p class="hero-sub">{{date_range}} · UID {{user_uid}}</p>
+  </header>
+
+  <!-- ===== Stats ===== -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-number">{{total_dynamics}}</div>
+      <div class="stat-label">动态总数</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number green">{{video_count}}</div>
+      <div class="stat-label">视频数量</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number orange">{{subtitle_count}}</div>
+      <div class="stat-label">有字幕</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">{{days}}</div>
+      <div class="stat-label">时间范围 (天)</div>
+    </div>
+  </div>
+
+  <!-- ===== Content Sections ===== -->
+  <div class="content-grid">
+{{{content_sections}}}
+  </div><!-- /content-grid -->
+
+  <!-- ===== Footer ===== -->
+  <footer class="footer">
+    <p>
+      数据来源：<a href="https://space.bilibili.com/{{user_uid}}" target="_blank">bilibili @{{author_name}}</a>
+      &ensp;·&ensp;总结时间：{{generate_date}}
+    </p>
+  </footer>
+
+</div><!-- /page-wrapper -->
+</body>
+</html>
