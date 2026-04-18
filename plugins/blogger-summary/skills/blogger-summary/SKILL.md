@@ -120,7 +120,7 @@ python3 "$PROJECT_ROOT/.claude/skills/bili-summary/scripts/fetch_bili_content.py
 如果用户确认：
 1. **先读取 HTML 模板**：使用 Read 工具读取 `$SKILL_DIR/templates/bili-summary-tmp.html`（如果 `$SKILL_DIR` 不可用，使用 `$PROJECT_ROOT/.claude/skills/bili-summary/templates/bili-summary-tmp.html`）
 2. **基于模板生成 HTML**：严格复用模板中的 CSS 变量体系、class 命名规范和组件结构（如 `.glass`、`.hero`、`.stat-card`、`.section-title`、`.bullet-list`、`.quote-block`、`.dark-block`、`.eval-grid`、`.target-grid`、`.apple-table` 等），将结构化总结内容填充到模板的 `{{{content_sections}}}` 区域
-3. **调用 apple skill 增强**（可选）：如果内容中有特别适合可视化的数据（如对比图表、趋势分析），可以调用 `apple-ppt-builder-suite:apple-style-page-ppt-builder-plus` skill 生成额外的可视化组件，但必须确保生成的组件与模板的 CSS 变量体系和设计风格一致
+3. **调用 apple skill 增强**（可选）：如果内容中有特别适合可视化的数据（如对比图表、趋势分析），可以调用 `apple-style-page-builder:apple-style-page-ppt-builder-plus` skill 生成额外的可视化组件，但必须确保生成的组件与模板的 CSS 变量体系和设计风格一致
 4. **输出路径**：`output/<UP主名字>-summary.html`
 5. 生成完成后用浏览器打开并告知用户输出路径
 
