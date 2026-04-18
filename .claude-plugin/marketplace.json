@@ -11,23 +11,16 @@
   },
   "plugins": [
     {
-      "name": "apple-ppt-builder-suite",
-      "description": "Premium Apple Liquid Glass style web PPT builder skills for Claude Code, support all scenario presentation creation",
-      "source": "./",
-      "strict": false,
-      "skills": [
-        "./skills/apple-style-page-ppt-builder",
-        "./skills/apple-style-page-ppt-builder-plus"
-      ]
+      "name": "apple-style-page-builder",
+      "description": "苹果 Liquid Glass 设计风格网页生成工具集，遵循 iOS 设计语言规范，支持各类演示场景创建",
+      "source": "./plugins/apple-style-page-builder",
+      "strict": false
     },
     {
-      "name": "bili-summary",
-      "description": "B站UP主近期动态总结工具，自动获取并总结UP主的图文动态和视频内容，生成结构化摘要",
-      "source": "./",
-      "strict": false,
-      "skills": [
-        "./skills/bili-summary"
-      ]
+      "name": "blogger-summary",
+      "description": "博主观点总结工具，自动获取并总结博主的图文动态和视频内容，提取关键观点生成结构化总结",
+      "source": "./plugins/blogger-summary",
+      "strict": false
     }
   ]
 }

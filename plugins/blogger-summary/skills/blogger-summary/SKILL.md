@@ -1,7 +1,7 @@
 ---
-name: bili-summary
+name: blogger-summary
 description: >
-  总结B站UP主一段时间内的图文动态和视频内容，提取关键观点生成结构化总结。
+  总结博主(当前支持b站up主）一段时间内的图文动态和视频内容，提取关键观点生成结构化总结，支持多平台。
 user-invocable: true
 allowed-tools:
   - Bash
@@ -13,9 +13,9 @@ allowed-tools:
   - AskUserQuestion
 ---
 
-# bili-summary：B站UP主近期动态总结
+# blogger-summary：博主观点总结
 
-自动获取并总结B站UP主近期动态、视频字幕，生成清晰的结构化总结。依赖 `opencli` 工具获取数据。
+自动获取并总结博主（支持多平台）近期动态、视频字幕，提取关键观点生成清晰的结构化总结。依赖 `opencli` 工具获取数据。
 
 ## 依赖要求
 
